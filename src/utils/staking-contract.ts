@@ -65,7 +65,7 @@ const stakeToken = async (amount: string) => {
 
 const unstake = async (amount: string) => {
     //@ts-ignore
-    await stakingContract.unstake(
+    await stakingContract.un_stake(
       { amount },
       30000000000000,
       1

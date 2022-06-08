@@ -79,7 +79,7 @@ function StakingPage() {
                 stakeBalance: parseInt(rawData.stake_balance),
                 unstakeBalance: parseInt(rawData.unstake_balance),
                 reward: parseInt(rawData.reward),
-                startUnstakeTimestamp: parseInt(rawData.start_unstake_timestamp)
+                startUnstakeTimestamp: parseInt(rawData.unstake_start_timestamp)
             };
             setStakingAccount(data);
         }
@@ -214,7 +214,9 @@ function StakingPage() {
                                         {stakingAccount.stakeBalance}
                                         <img className="mr-1 ml-2" style={{width: 15, height: 15}} src={getTokenMetadata("LINE").icon} alt=""/><span className="text-primary">LINE</span>
                                     </p>
-                                    <InputNumber min={0} className={"staking-input font-bold mb-4 rounded"} addonAfter={<MaxButton onClick={() => setUnstakeValue(parseTokenWithDecimals(stakingAccount.stakeBalance, getTokenMetadata("LINE").decimals))} />} value={unstakeValue} onChange={(value) => setUnstakeValue(value)} defaultValue={0} />
+                                    <InputNumber min={0} className={"staking-input font-bold mb-4 rounded"} 
+                                    addonAfter={<MaxButton onClick={() => setUnstakeValue(stakingAccount.stakeBalance)} />} 
+                                    value={unstakeValue} onChange={(value) => setUnstakeValue(value)} defaultValue={0} />
 
                                     <p className="text-xs text-primaryText mb-1">Unstaked tokens will be made available pending a release period of ~12hrs (1 epochs).</p>
                                     <MyButton onClick={handleUnstakeToken} loading={unstakeLoading} disable={
@@ -231,7 +233,7 @@ function StakingPage() {
                             <p className={"text-base text-primaryText mb-4"}>Withdraw</p>
                             <div className="flex flex-row justify-between mb-0.5">
                                 <span className="text-sm text-primaryText">Unstaked</span>
-                                <span className="text-sm text-white font-bold">{formatNumber(parseTokenWithDecimals(stakingAccount.unstakeBalance, getTokenMetadata("LINE").decimals))} LINE</span>
+                                <span className="text-sm text-white font-bold">{stakingAccount.unstakeBalance} LINE</span>
                             </div>
                             <div className="flex flex-row justify-between mb-0.5">
                                 <span className="text-sm text-primaryText">Unstaked at</span>
