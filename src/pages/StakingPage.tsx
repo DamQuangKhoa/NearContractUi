@@ -54,7 +54,7 @@ function StakingPage() {
             balance = await ftContract.ft_balance_of({account_id: wallet.getAccountId()});
         }
 
-        setBalance(parseTokenWithDecimals(parseInt(balance), 24))
+        setBalance(+balance)
     }
 
     const getPoolInfo = async () => {
@@ -100,7 +100,7 @@ function StakingPage() {
         if (!stakeValue || stakeValue <= 0 || stakeValue > balance) return;
         setStakeLoading(true);
         try {
-            await stakeToken(parseTokenAmount(stakeValue, getTokenMetadata("VBIC").decimals).toLocaleString('fullwide', {useGrouping:false}))
+            await stakeToken(stakeValue.toString())
         } catch (e) {
             console.log("Error", e);
         } finally {
@@ -110,10 +110,10 @@ function StakingPage() {
 
     const handleUnstakeToken = async () => {
         if (!wallet.isSignedIn()) await login();
-      if (!unstakeValue || unstakeValue <= 0 || unstakeValue > parseTokenWithDecimals(stakingAccount.stakeBalance, getTokenMetadata("VBIC").decimals)) return;
+      if (!unstakeValue || unstakeValue <= 0 || unstakeValue > stakingAccount.stakeBalance) return;
       setUnstakeLoading(true);
       try {
-          await unstake(parseTokenAmount(unstakeValue, getTokenMetadata("VBIC").decimals).toLocaleString('fullwide', {useGrouping:false}))
+          await unstake(unstakeValue.toString());
       } catch (e) {
           console.log("Error", e);
       } finally {
@@ -123,7 +123,7 @@ function StakingPage() {
 
     const handleClaimReward = async () => {
         if (!wallet.isSignedIn()) await login();
-        if (parseTokenWithDecimals(stakingAccount.reward, getTokenMetadata("VBIC").decimals) < 1) return;
+        if (stakingAccount.reward < 1) return;
         setClaimLoading(true);
         try {
             await harvest();
@@ -169,14 +169,14 @@ function StakingPage() {
                         <p className={"text-base text-primary mb-4"}>{ wallet.getAccountId() }</p>
                         <div className="flex flex-row justify-between">
                             <span className="text-sm text-primaryText">Total staked</span>
-                            <span className="text-sm text-white font-bold">{formatNumber(parseTokenWithDecimals(stakingAccount.stakeBalance, getTokenMetadata("VBIC").decimals))} VBIC</span>
+                            <span className="text-sm text-white font-bold">{stakingAccount.stakeBalance} LINE</span>
                         </div>
                         <div className="flex flex-row justify-between mb-3">
                             <span className="text-sm text-primaryText">Pending Reward</span>
-                            <span className="text-sm text-white font-bold">{formatNumber(parseTokenWithDecimals(stakingAccount.reward, getTokenMetadata("VBIC").decimals))} VBIC</span>
+                            <span className="text-sm text-white font-bold">{stakingAccount.reward} LINE</span>
                         </div>
-                        <p className="text-xs text-primaryText mb-1"><span>You can claim reward when reward balance greater than 1 VBIC</span></p>
-                        <MyButton onClick={handleClaimReward} loading={claimLoading} disable={parseTokenWithDecimals(stakingAccount.reward, getTokenMetadata("VBIC").decimals) < 1} text="Claim Reward"/>
+                        <p className="text-xs text-primaryText mb-1"><span>You can claim reward when reward balance greater than 1 LINE</span></p>
+                        <MyButton onClick={handleClaimReward} loading={claimLoading} disable={stakingAccount.reward <= 0} text="Claim Reward"/>
                     </div>
                     <div className={"bg-cardBg rounded-2xl p-5 mb-2"}>
                         <div className={"bg-black bg-opacity-20 rounded-xl p-1"}>
@@ -196,7 +196,7 @@ function StakingPage() {
                                         <CreditCardOutlined />
                                         <span className="text-primaryText mr-2 ml-1">Balance:</span>
                                         {formatNumber(balance)}
-                                        <img className="mr-1 ml-2" style={{width: 15, height: 15}} src={getTokenMetadata("VBIC").icon} alt=""/><span className="text-primary">VBIC</span>
+                                        <img className="mr-1 ml-2" style={{width: 15, height: 15}} src={getTokenMetadata("LINE").icon} alt=""/><span className="text-primary">LINE</span>
                                     </p>
                                     <InputNumber min={0} className={"staking-input font-bold mb-4 rounded"} addonAfter={<MaxButton onClick={() => setStakeValue(balance)} />} value={stakeValue} onChange={(value) => setStakeValue(value)} defaultValue={0} />
 
@@ -211,14 +211,14 @@ function StakingPage() {
                                     <p className="flex flex-row items-center text-primaryText mb-2">
                                         <CreditCardOutlined />
                                         <span className="text-primaryText mr-2 ml-1">Staked balance:</span>
-                                        {formatNumber(parseTokenWithDecimals(stakingAccount.stakeBalance, getTokenMetadata("VBIC").decimals))}
-                                        <img className="mr-1 ml-2" style={{width: 15, height: 15}} src={getTokenMetadata("VBIC").icon} alt=""/><span className="text-primary">VBIC</span>
+                                        {stakingAccount.stakeBalance}
+                                        <img className="mr-1 ml-2" style={{width: 15, height: 15}} src={getTokenMetadata("LINE").icon} alt=""/><span className="text-primary">LINE</span>
                                     </p>
-                                    <InputNumber min={0} className={"staking-input font-bold mb-4 rounded"} addonAfter={<MaxButton onClick={() => setUnstakeValue(parseTokenWithDecimals(stakingAccount.stakeBalance, getTokenMetadata("VBIC").decimals))} />} value={unstakeValue} onChange={(value) => setUnstakeValue(value)} defaultValue={0} />
+                                    <InputNumber min={0} className={"staking-input font-bold mb-4 rounded"} addonAfter={<MaxButton onClick={() => setUnstakeValue(parseTokenWithDecimals(stakingAccount.stakeBalance, getTokenMetadata("LINE").decimals))} />} value={unstakeValue} onChange={(value) => setUnstakeValue(value)} defaultValue={0} />
 
                                     <p className="text-xs text-primaryText mb-1">Unstaked tokens will be made available pending a release period of ~12hrs (1 epochs).</p>
                                     <MyButton onClick={handleUnstakeToken} loading={unstakeLoading} disable={
-                                      !unstakeValue || unstakeValue <= 0 || unstakeValue > parseTokenWithDecimals(stakingAccount.stakeBalance, getTokenMetadata("VBIC").decimals)
+                                      !unstakeValue || unstakeValue <= 0 || unstakeValue > stakingAccount.stakeBalance
                                     } text="Unstake"/>
                                 </div>
                             </TabPane>
@@ -231,7 +231,7 @@ function StakingPage() {
                             <p className={"text-base text-primaryText mb-4"}>Withdraw</p>
                             <div className="flex flex-row justify-between mb-0.5">
                                 <span className="text-sm text-primaryText">Unstaked</span>
-                                <span className="text-sm text-white font-bold">{formatNumber(parseTokenWithDecimals(stakingAccount.unstakeBalance, getTokenMetadata("VBIC").decimals))} VBIC</span>
+                                <span className="text-sm text-white font-bold">{formatNumber(parseTokenWithDecimals(stakingAccount.unstakeBalance, getTokenMetadata("LINE").decimals))} LINE</span>
                             </div>
                             <div className="flex flex-row justify-between mb-0.5">
                                 <span className="text-sm text-primaryText">Unstaked at</span>
@@ -271,11 +271,11 @@ function StakingPage() {
                         <div
                           className="lg:h-16 xs:h-20 md:h-20 rounded-lg bg-darkGradientBg shadow-dark p-2.5 hover:bg-darkGradientHoverBg">
                             <div className="text-primaryText text-xs mb-1 xs:h-8 md:h-8 lg:text-center">
-                                Total VBIC Staked
+                                Total LINE Staked
                             </div>
                             <div className="lg:flex lg:justify-center lg:items-center">
-                                <label className="text-base font-medium text-xREFColor">{formatNumber(parseTokenWithDecimals(poolInfo.totalStakeBalance, getTokenMetadata("VBIC").decimals))}</label>
-                                <label className="text-xs ml-1.5 text-primaryText">VBIC</label>
+                                <label className="text-base font-medium text-xREFColor">{poolInfo.totalStakeBalance}</label>
+                                <label className="text-xs ml-1.5 text-primaryText">LINE</label>
                             </div>
                         </div>
                         <div
@@ -284,8 +284,8 @@ function StakingPage() {
                                 Total Reward Earned
                             </div>
                             <div className="lg:flex lg:justify-center lg:items-center">
-                                <label className="text-base font-medium text-xREFColor">{formatNumber(parseTokenWithDecimals(poolInfo.totalReward, getTokenMetadata("VBIC").decimals))}</label>
-                                <label className="text-xs ml-1.5 text-primaryText">VBIC</label>
+                                <label className="text-base font-medium text-xREFColor">{poolInfo.totalReward}</label>
+                                <label className="text-xs ml-1.5 text-primaryText">LINE</label>
                             </div>
                         </div>
                     </div>

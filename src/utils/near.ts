@@ -78,6 +78,7 @@ export const logout = () => {
  */
 export function parseTokenWithDecimals(amount: number, decimals: number) {
     let amountD = amount / Math.pow(10, decimals);
+    
     return Math.floor(amountD * 100) / 100;
 }
 

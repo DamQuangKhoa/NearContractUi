@@ -12,7 +12,7 @@ function App() {
         <MainLayout>
             <div className="relative pb-24 overflow-x-hidden xs:flex xs:flex-col md:flex md:flex-col">
                 <Switch>
-                    <Route path="/" exact component={AutoHeight(SwapPage)} />
+                    <Route path="/" exact component={AutoHeight(StakingPage)} />
                     <Route path="/staking" component={AutoHeight(StakingPage)} />
                     <Route path="/faucet" component={AutoHeight(FaucetPage)} />
                     <Route path="/wrap-near" component={AutoHeight(WrapNearPage)} />

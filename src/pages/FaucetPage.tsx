@@ -51,16 +51,16 @@ const FaucetPage = () => {
     }
 
     const handleMaxButton = () => {
-        let currentShared = parseTokenWithDecimals(accountBalanceShare, getTokenMetadata("VBIC").decimals);
-        let maxSharePerAccount = parseTokenWithDecimals(faucetInfo.maxSharePerAccount, getTokenMetadata("VBIC").decimals)
+        let currentShared = accountBalanceShare;
+        let maxSharePerAccount = faucetInfo.maxSharePerAccount;
 
         setFaucetValue(maxSharePerAccount - currentShared);
     }
 
     const isDisable = () => {
-        let currentShared = parseTokenWithDecimals(accountBalanceShare, getTokenMetadata("VBIC").decimals);
-        let maxSharePerAccount = parseTokenWithDecimals(faucetInfo.maxSharePerAccount, getTokenMetadata("VBIC").decimals);
-        let totalBalance = parseTokenWithDecimals(faucetInfo.totalBalanceShare, getTokenMetadata("VBIC").decimals);
+        let currentShared = accountBalanceShare;
+        let maxSharePerAccount = faucetInfo.maxSharePerAccount;
+        let totalBalance = faucetInfo.totalBalanceShare;
 
         return !wallet.isSignedIn() || !faucetValue || totalBalance == 0 || totalBalance <= faucetValue || currentShared == maxSharePerAccount || currentShared + faucetValue > maxSharePerAccount;
     }
@@ -71,7 +71,7 @@ const FaucetPage = () => {
         setFaucetLoading(true);
         try {
             // @ts-ignore
-            await faucet(parseTokenAmount(faucetValue, getTokenMetadata("VBIC").decimals).toLocaleString('fullwide', {useGrouping:false}));
+            await faucet(faucetValue.toString());
         } catch (e) {
             console.log("Error", e);
         } finally {
@@ -95,7 +95,7 @@ const FaucetPage = () => {
               <div className={"flex flex-col mt-5 justify-between"}>
                   <div className={"flex flex-row justify-between mb-2 bg-cardBg rounded-2xl p-5 w-full"}>
                       <p className={"text-base text-primaryText"}>Faucet Balance</p>
-                      <p className={"text-2xl text-white"}>{formatNumber(parseTokenWithDecimals(faucetInfo.totalBalanceShare, getTokenMetadata("VBIC").decimals))} VBIC</p>
+                      <p className={"text-2xl text-white"}>{faucetInfo.totalBalanceShare} LINE</p>
                   </div>
               </div>
               <div className={"bg-cardBg rounded-2xl p-5 mb-2"}>
@@ -103,16 +103,16 @@ const FaucetPage = () => {
                       <p className="flex flex-row items-center text-primaryText mb-2">
                           <CreditCardOutlined />
                           <span className="text-primaryText mr-2 ml-1">Shared balance:</span>
-                          {formatNumber(parseTokenWithDecimals(accountBalanceShare, getTokenMetadata("VBIC").decimals))}
-                          <img className="mr-1 ml-2" style={{width: 15, height: 15}} src={getTokenMetadata("VBIC").icon} alt=""/><span className="text-primary">VBIC</span>
+                          {accountBalanceShare}
+                          <img className="mr-1 ml-2" style={{width: 15, height: 15}} src={getTokenMetadata("LINE").icon} alt=""/><span className="text-primary">LINE</span>
                       </p>
                       <InputNumber min={0} className={"staking-input font-bold mb-4 rounded"} addonAfter={<MaxButton onClick={handleMaxButton} />} value={faucetValue} onChange={(value) => setFaucetValue(value)} defaultValue={0} />
 
                       <p className="text-xs text-primaryText mb-1">
                           {
                               accountBalanceShare == faucetInfo.maxSharePerAccount ?
-                                <span>One account can get max {formatNumber(parseTokenWithDecimals(faucetInfo.maxSharePerAccount, getTokenMetadata("VBIC").decimals))} VBIC. You can not get more!</span>
-                                :<span>One account can get max {formatNumber(parseTokenWithDecimals(faucetInfo.maxSharePerAccount, getTokenMetadata("VBIC").decimals))} VBIC. You can get more!</span>
+                                <span>One account can get max {faucetInfo.maxSharePerAccount}} LINE. You can not get more!</span>
+                                :<span>One account can get max {faucetInfo.maxSharePerAccount} LINE. You can get more!</span>
                           }
                       </p>
                       <MyButton onClick={handleFaucet} loading={faucetLoading} disable={isDisable()} text="Claim token"/>
@@ -132,11 +132,11 @@ const FaucetPage = () => {
                   <div
                     className="lg:h-16 xs:h-20 md:h-20 rounded-lg bg-darkGradientBg shadow-dark p-2.5 hover:bg-darkGradientHoverBg">
                       <div className="text-primaryText text-xs mb-1 xs:h-8 md:h-8 lg:text-center">
-                          Total VBIC Shared
+                          Total LINE Shared
                       </div>
                       <div className="lg:flex lg:justify-center lg:items-center">
-                          <label className="text-base font-medium text-xREFColor">{formatNumber(parseTokenWithDecimals(faucetInfo.totalShared, getTokenMetadata("VBIC").decimals))}</label>
-                          <label className="text-xs ml-1.5 text-primaryText">VBIC</label>
+                          <label className="text-base font-medium text-xREFColor">{faucetInfo.totalShared}</label>
+                          <label className="text-xs ml-1.5 text-primaryText">LINE</label>
                       </div>
                   </div>
               </div>

@@ -1,6 +1,3 @@
-# VBI-UI
-
-This is the front-end for VBI examples.
 
 ## Quick Start
 

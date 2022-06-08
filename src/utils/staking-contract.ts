@@ -14,7 +14,7 @@ const stakingContract = new Contract(
   config.VBI_STAKING_CONTRACT,
   {
       viewMethods: ["get_account_info", "get_account_reward", "get_pool_info", "storage_balance_of"],
-      changeMethods: ["storage_deposit", "harvest", "unstake", "withdraw"]
+      changeMethods: ["storage_deposit", "harvest", "un_stake", "withdraw"]
   }
 )
 
