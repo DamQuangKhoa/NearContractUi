@@ -46,7 +46,7 @@ const stakeToken = async (amount: string) => {
 
     if (!parseInt(storageStatus)) {
         let stakingDepositStorage: Transaction = {
-            receiverId: config.VBI_STAKING_CONTRACT,
+            receiverId: config.VBI_FT_CONTRACT,
             functionCalls: [
                 {
                     methodName: "storage_deposit",
