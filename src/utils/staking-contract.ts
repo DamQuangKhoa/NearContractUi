@@ -50,7 +50,9 @@ const stakeToken = async (amount: string) => {
             functionCalls: [
                 {
                     methodName: "storage_deposit",
-                    args: {},
+                    args: {
+                        account_id: wallet.getAccountId()
+                    },
                     gas: "10000000000000",
                     amount: STAKING_STORAGE_AMOUNT
                 }
