@@ -14,7 +14,7 @@ const stakingContract = new Contract(
   config.VBI_STAKING_CONTRACT,
   {
       viewMethods: ["get_account_info", "get_account_reward", "get_pool_info", "storage_balance_of"],
-      changeMethods: ["storage_deposit", "harvest", "un_stake", "withdraw"]
+      changeMethods: ["storage_deposite", "harvest", "un_stake", "withdraw"]
   }
 )
 
@@ -46,7 +46,7 @@ const stakeToken = async (amount: string) => {
 
     if (!parseInt(storageStatus)) {
         let stakingDepositStorage: Transaction = {
-            receiverId: config.VBI_FT_CONTRACT,
+            receiverId: config.VBI_STAKING_CONTRACT,
             functionCalls: [
                 {
                     methodName: "storage_deposit",
