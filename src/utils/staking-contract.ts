@@ -49,7 +49,7 @@ const stakeToken = async (amount: string) => {
             receiverId: config.VBI_STAKING_CONTRACT,
             functionCalls: [
                 {
-                    methodName: "storage_deposit",
+                    methodName: "storage_deposite",
                     args: {
                         account_id: wallet.getAccountId()
                     },
