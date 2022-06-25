@@ -5,7 +5,7 @@ import getConfig from './config';
 import SpecialWallet from "~utils/SpecialWallet";
 
 const env: string = process.env.NEAR_ENV || "development";
-export const config: any = getConfig(env);
+export const config = getConfig(env);
 
 export const near = new Near({
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
