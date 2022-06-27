@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {Progress} from "antd";
 
+const INTERVAL = 300;
+
 const IntervalSpinner = (props: { onProgressSuccess: Function }) => {
     const [refreshPercent, setRefreshPercent] = useState(0);
 
     useEffect(() => {
         // handle fresh pool and account
-        if (refreshPercent == 100) {
+        if (refreshPercent == INTERVAL) {
             setRefreshPercent(0);
             props.onProgressSuccess();
         }
@@ -14,10 +16,10 @@ const IntervalSpinner = (props: { onProgressSuccess: Function }) => {
 
     useEffect(() => {
         const intervalPercent = setInterval(() => {
-            if (refreshPercent != 100) {
+            if (refreshPercent != INTERVAL) {
                 setRefreshPercent(refreshPercent => refreshPercent + 1);
             }
-        }, 100);
+        }, INTERVAL);
 
         return () => clearInterval(intervalPercent);
     }, [])
